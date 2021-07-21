@@ -65,7 +65,9 @@
         "css",
         "json",
         "rust",
-        "python"
+        "python",
+        "xml",
+        "vim"
     ],
     "git.enableGutters": true,
     "git.branchCharacter": "\uf408",

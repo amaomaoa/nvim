@@ -53,16 +53,54 @@ Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'neoclide/coc.nvim'
-Plug 'racer-rust/vim-racer'
-Plug 'rust-lang/rust.vim'
+"Plug 'racer-rust/vim-racer'
+"Plug 'rust-lang/rust.vim'
 Plug 'mg979/vim-xtabline'
 Plug 'iamcco/markdown-preview.vim'
 Plug 'itchyny/vim-cursorword'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'neoclide/coc-highlight'
+
+
+
+
+
+
+
 call plug#end()
 colorscheme deus 
+
+" ===
+" === xtabline
+" ===
+let g:xtabline_settings = {}
+"let g:xtabline_settings.enable_mappings = 0
+let g:xtabline_settings.tabline_modes = [ 'buffers' , 'tabs']
+let g:xtabline_settings.enable_persistance = 0
+let g:xtabline_settings.last_open_first = 1
+let g:xtabline_settings.indicators = {
+    \ 'modified': '[+]',
+    \ 'pinned': '[📌]',
+    \}
+let g:xtabline_settings.icons = {
+    \'pin': '📌',
+    \'star': '★',
+    \'book': '📖',
+    \'lock': '🔒',
+    \'hammer': '🔨',
+    \'tick': '✔',
+    \'cross': '✖',
+    \'warning': '⚠',
+    \'menu': '☰',
+    \'apple': '🍎',
+    \'linux': '🐧',
+    \'windows': '⌘',
+    \'git': '',
+    \'palette': '🎨',
+    \'lens': '🔍',
+    \'flag': '🏁',
+    \}
 
 let g:UltiSnipsExpandTrigger = "<tab>"
 
@@ -100,8 +138,9 @@ let g:airline_powerline_fonts = 1
 let g:racer_experimental_completer = 1
 
 
-""""""格式化rust""""""
-let g:rustfmt_autosave = 1
+
+"""""""格式化rust""""""
+"let g:rustfmt_autosave = 1
 
 set t_Co=256
 set termguicolors
@@ -121,8 +160,17 @@ let g:deus_termcolors=256
 """""""缩进线"""""""
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 
+map <C-b> :set operatorfunc=<SNR>21_CodeActionFromSelected
+
 
 " NERDTree
+"
+" Exit Vim if NERDTree is the only window remaining in the only tab.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+" Close the tab if NERDTree is the only window remaining in it.
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+"
+"
 map T :NERDTreeToggle<CR>
 let g:NERDTreeIndicatorMapCustom = { 
     \ "Modified"  : "✹",
@@ -158,11 +206,16 @@ set clipboard+=unnamedplus
 " === coc.nvim
 " ===
 
-
+"function! s:cocActionsOpenFromSelected(type) abort
+  "execute 'CocCommand actions.open ' . a:type
+"endfunction
+"xmap ,a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
+"nmap ,a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<CR>g@
 
 """ultisnips"""
-let g:UltiSnipsExpandTrigger="nn"
-let g:UltiSnipsJumpForwardTrigger="nn"
+
+let g:UltiSnipsExpandTrigger="\\\\"
+let g:UltiSnipsJumpForwardTrigger="\\\\"
 let g:UltiSnipsJumpBackwardTrigger="NN"
 
 """"""自动添加头文件""""""
@@ -272,7 +325,7 @@ func! CompileRunGcc()
   elseif &filetype == 'rust'
       set splitbelow
       :sp
-		  :res 15
+		  :res 20
       :term time cargo run
 	endif
 endfunc
@@ -313,7 +366,7 @@ let g:mkdp_command_for_global = 1
 "endfunc 
 
 "注释
-let mapleader="g"
+"let mapleader=\
 "gcc注释
 "gcu取消注释
 
