@@ -58,10 +58,10 @@ Plug 'iamcco/markdown-preview.vim'
 Plug 'itchyny/vim-cursorword'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-Plug 'neoclide/coc-highlight'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'iamcco/mathjax-support-for-mkdp'
 Plug 'elzr/vim-json'
+Plug 'machakann/vim-highlightedyank'
 
 
 
@@ -71,9 +71,11 @@ Plug 'elzr/vim-json'
 call plug#end()
 colorscheme deus 
 
-
 ""json"
 let g:indentLine_concealcursor=""
+
+"""vim-highlightedyank"""
+let g:highlightedyank_highlight_duration = 300
 
 
 " This is the default option:
@@ -395,16 +397,17 @@ let g:mkdp_command_for_global = 1
 "endfunc 
 
 "注释
-"let mapleader=\
+let mapleader= " "
 "gcc注释
 "gcu取消注释
 
 "vim-airline"""""""""""""""""""""""""""
 "set laststatus=2  "永远显示状态栏
 let g:airline_powerline_fonts = 1  " 支持 powerline 字体
-let g:airline#extensions#tabline#enabled = 1  "显示窗口tab和buffer
 
-"coc
+
+"""""""coc"""""""
+
 " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
 " unicode characters in the file autoload/float.vim
 set encoding=utf-8
@@ -428,12 +431,12 @@ set shortmess+=c
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
-"if has("patch-8.1.1564")
-  "" Recently vim can merge signcolumn and number column into one
-  "set signcolumn=number
-"else
-  "set signcolumn=yes
-"endif
+if has("nvim-0.5.0") || has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
 
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
@@ -486,7 +489,7 @@ function! s:show_documentation()
 endfunction
 
 " Highlight the symbol and its references when holding the cursor.
-"autocmd CursorHold * silent call CocActionAsync('highlight')
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
@@ -561,7 +564,7 @@ nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
 " Show commands.
 nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
 " Find symbol of current document.
-nnoremap <leader>o  :<C-u>CocList outline<cr>
+nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
 " Search workspace symbols.
 nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
@@ -570,6 +573,3 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
-
-
-
