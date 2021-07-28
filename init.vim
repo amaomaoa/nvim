@@ -53,15 +53,15 @@ Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'neoclide/coc.nvim'
-"Plug 'racer-rust/vim-racer'
-"Plug 'rust-lang/rust.vim'
 Plug 'mg979/vim-xtabline'
 Plug 'iamcco/markdown-preview.vim'
 Plug 'itchyny/vim-cursorword'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'neoclide/coc-highlight'
-
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'iamcco/mathjax-support-for-mkdp'
+Plug 'elzr/vim-json'
 
 
 
@@ -70,6 +70,25 @@ Plug 'neoclide/coc-highlight'
 
 call plug#end()
 colorscheme deus 
+
+
+""json"
+let g:indentLine_concealcursor=""
+
+
+" This is the default option:
+"   - Preview window on the right with 50% width
+"   - CTRL-/ will toggle preview window.
+" - Note that this array is passed as arguments to fzf#vim#with_preview function.
+" - To learn more about preview window options, see `--preview-window` section of `man fzf`.
+let g:fzf_preview_window = ['right:50%', 'ctrl-/']
+
+" Preview window on the upper side of the window with 40% height,
+" hidden by default, ctrl-/ to toggle
+let g:fzf_preview_window = ['up:40%:hidden', 'ctrl-/']
+
+" Empty value to disable preview window altogether
+let g:fzf_preview_window = []
 
 " ===
 " === xtabline
@@ -83,26 +102,10 @@ let g:xtabline_settings.indicators = {
     \ 'modified': '[+]',
     \ 'pinned': '[📌]',
     \}
-let g:xtabline_settings.icons = {
-    \'pin': '📌',
-    \'star': '★',
-    \'book': '📖',
-    \'lock': '🔒',
-    \'hammer': '🔨',
-    \'tick': '✔',
-    \'cross': '✖',
-    \'warning': '⚠',
-    \'menu': '☰',
-    \'apple': '🍎',
-    \'linux': '🐧',
-    \'windows': '⌘',
-    \'git': '',
-    \'palette': '🎨',
-    \'lens': '🔍',
-    \'flag': '🏁',
-    \}
+
 
 let g:UltiSnipsExpandTrigger = "<tab>"
+
 
 "let g:SimpylFold_docstring_preview=1
 "snippets
@@ -139,6 +142,11 @@ let g:racer_experimental_completer = 1
 
 
 
+autocmd ColorScheme * 
+              \ hi CocWarningSign  ctermfg=Brown guifg=#ff922b |
+              \ hi CocInfoSign  ctermfg=Yellow guifg=#fab005 |
+              \ hi CocHintSign  ctermfg=Blue guifg=#008B8B	 |
+              \ hi CocUnderline  cterm=underline gui=underline
 """""""格式化rust""""""
 "let g:rustfmt_autosave = 1
 
@@ -217,6 +225,27 @@ set clipboard+=unnamedplus
 let g:UltiSnipsExpandTrigger="\\\\"
 let g:UltiSnipsJumpForwardTrigger="\\\\"
 let g:UltiSnipsJumpBackwardTrigger="NN"
+
+
+
+""""snippets""""
+"使用 <Cl> 触发代码段展开。
+imap \\ <Plug>(coc-snippets-expand)
+
+"使用 <Cj> 为片段的可视占位符选择文本
+vmap <C-j> <Plug>(coc-snippets-select)
+
+"使用 <Cj> 跳转到下一个占位符，这是 coc.nvim 的默认值
+let g:coc_snippet_next = '\\'
+
+"使用 <Ck> 跳转到上一个占位符，这是 coc.nvim 的默认值
+let g:coc_snippet_prev = '<c-k>'
+
+"使用 <Cj> 进行扩展和跳转（使扩展具有更高的优先级。）
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+
+"使用 <leader>x 将视觉选定代码转换为片段
+xmap  <leader>x   <Plug> (coc - convert - snippet)
 
 """"""自动添加头文件""""""
 autocmd BufNewFile *.py,*.sh,*.java exec ":call SetTitle()"
@@ -399,12 +428,12 @@ set shortmess+=c
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
-if has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
+"if has("patch-8.1.1564")
+  "" Recently vim can merge signcolumn and number column into one
+  "set signcolumn=number
+"else
+  "set signcolumn=yes
+"endif
 
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
@@ -532,7 +561,7 @@ nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
 " Show commands.
 nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
 " Find symbol of current document.
-nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+nnoremap <leader>o  :<C-u>CocList outline<cr>
 " Search workspace symbols.
 nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.

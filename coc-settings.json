@@ -54,6 +54,9 @@
     "list.previewHighlightGroup": "Statement",
     "list.nextKeymap": "<C-e>",
     "list.previousKeymap": "<C-u>",
+    "rust-analyzer.inlayHints.chainingHints": false,
+    "rust-analyzer.inlayHints.refreshOnInsertMode": true,
+    "rust-analyzer.updates.prompt": false,
     "coc.preferences.formatOnSaveFiletypes": [
         "go",
         "javascript",
@@ -67,24 +70,14 @@
         "rust",
         "python",
         "xml",
-        "vim"
+        "vim",
+        "jsp"
     ],
-    "git.enableGutters": true,
-    "git.branchCharacter": "\uf408",
-    "git.addGBlameToBufferVar": false,
-    "git.addGBlameToVirtualText": false,
-    "git.virtualTextPrefix": " ❯❯❯ ",
-    "git.addedSign.hlGroup": "GitGutterAdd",
-    "git.changedSign.hlGroup": "GitGutterChange",
-    "git.removedSign.hlGroup": "GitGutterDelete",
-    "git.topRemovedSign.hlGroup": "GitGutterDelete",
-    "git.changeRemovedSign.hlGroup": "GitGutterChangeDelete",
-    "git.addedSign.text": "▎",
-    "git.changedSign.text": "░",
-    "git.removedSign.text": "▏",
-    "git.topRemovedSign.text": "▔",
-    "git.changeRemovedSign.text": "▒",
-    "git.enableGlobalStatus": false,
+    "snippets.extends": {
+        "jsp": [
+            "html"
+        ]
+    },
     "python.autoComplete.addBrackets": true,
     "python.jediEnabled": false,
     "python.formatting.provider": "yapf",
@@ -106,15 +99,6 @@
         "jsp"
     ],
     "languageserver": {
-        "rust": {
-            "command": "rust-analyzer",
-            "filetypes": [
-                "rust"
-            ],
-            "rootPatterns": [
-                "Cargo.toml"
-            ]
-        },
         "go": {
             "command": "gopls",
             "rootPatterns": [
