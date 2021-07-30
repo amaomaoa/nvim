@@ -34,6 +34,12 @@ set wildmenu
 set splitbelow
 "hi Visual term=bold cterm=underline ctermfg=130 gui=bold guifg=Brown
 "colorscheme ron
+"
+set list
+set listchars=tab:\|\ ,trail:▫
+
+
+
 call plug#begin()
 Plug 'mhinz/vim-startify'
 Plug 'preservim/nerdcommenter'
@@ -62,7 +68,7 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'iamcco/mathjax-support-for-mkdp'
 Plug 'elzr/vim-json'
 Plug 'machakann/vim-highlightedyank'
-
+Plug 'puremourning/vimspector',{'do':'./install_gadget.py --all'}
 
 
 
@@ -70,6 +76,9 @@ Plug 'machakann/vim-highlightedyank'
 
 call plug#end()
 colorscheme deus 
+
+
+
 
 ""json"
 let g:indentLine_concealcursor=""
@@ -109,6 +118,41 @@ let g:xtabline_settings.indicators = {
 let g:UltiSnipsExpandTrigger = "<tab>"
 
 
+
+
+" ===
+" === vimspector
+" ===
+let g:vimspector_enable_mappings = 'HUMAN'
+function! s:read_template_into_buffer(template)
+	" has to be a function to avoid the extra space fzf#run insers otherwise
+	execute '0r ~/.config/nvim/vimspector_json/'.a:template
+endfunction
+command! -bang -nargs=* LoadVimSpectorJsonTemplate call fzf#run({
+			\   'source': 'ls -1 ~/.config/nvim/vimspector_json',
+			\   'down': 20,
+			\   'sink': function('<sid>read_template_into_buffer')
+			\ })
+
+
+
+noremap <leader>vs :tabe ../.vimspector.json<CR>:LoadVimSpectorJsonTemplate<CR>
+sign define vimspectorBP text=☛ texthl=Normal
+sign define vimspectorBPDisabled text=☞ texthl=Normal
+sign define vimspectorPC text=🔶 texthl=SpellBad
+
+noremap <leader>vs :call Getvimspector()<CR>
+function! Getvimspector()
+    if &filetype == "rust"
+        :tabe ../.vimspector.json
+        :LoadVimSpectorJsonTemplate<CR>
+    else
+        :tabe .vimspector.json
+        :LoadVimSpectorJsonTemplate<CR> 
+    endif
+endfunction
+
+
 "let g:SimpylFold_docstring_preview=1
 "snippets
 
@@ -145,7 +189,7 @@ let g:racer_experimental_completer = 1
 
 
 autocmd ColorScheme * 
-              \ hi CocWarningSign  ctermfg=Brown guifg=#ff922b |
+              \ hi CocWarningSign  ctermfg=Brown guifg=#5F9EA0 |
               \ hi CocInfoSign  ctermfg=Yellow guifg=#fab005 |
               \ hi CocHintSign  ctermfg=Blue guifg=#008B8B	 |
               \ hi CocUnderline  cterm=underline gui=underline
@@ -212,15 +256,6 @@ set clipboard+=unnamedplus
 
 
 
-" ===
-" === coc.nvim
-" ===
-
-"function! s:cocActionsOpenFromSelected(type) abort
-  "execute 'CocCommand actions.open ' . a:type
-"endfunction
-"xmap ,a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
-"nmap ,a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<CR>g@
 
 """ultisnips"""
 
@@ -397,7 +432,7 @@ let g:mkdp_command_for_global = 1
 "endfunc 
 
 "注释
-let mapleader= " "
+"let mapleader= " "
 "gcc注释
 "gcu取消注释
 
@@ -431,12 +466,12 @@ set shortmess+=c
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
-if has("nvim-0.5.0") || has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
+"if has("nvim-0.5.0") || has("patch-8.1.1564")
+  "" Recently vim can merge signcolumn and number column into one
+  "set signcolumn=number
+"else
+  "set signcolumn=yes
+"endif
 
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
@@ -511,6 +546,15 @@ augroup end
 xmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>a  <Plug>(coc-codeaction-selected)
 
+
+
+nmap <leader>co :VimspectorReset<CR>
+
+xmap <leader>cd  <Plug>(coc-codelens-action)
+nmap <leader>cd  <Plug>(coc-codelens-action)
+
+
+
 " Remap keys for applying codeAction to the current buffer.
 nmap <leader>ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
@@ -541,6 +585,9 @@ endif
 " Requires 'textDocument/selectionRange' support of language server.
 nmap <silent> <C-s> <Plug>(coc-range-select)
 xmap <silent> <C-s> <Plug>(coc-range-select)
+
+
+
 
 " Add `:Format` command to format current buffer.
 command! -nargs=0 Format :call CocAction('format')

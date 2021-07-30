@@ -41,7 +41,7 @@
         "variable": "\ue71b"
     },
     "diagnostic.errorSign": "×",
-    "diagnostic.warningSign": "»",
+    "diagnostic.warningSign": "●",
     "diagnostic.infoSign": "ღ",
     "diagnostic.hintSign": "ஐ",
     "diagnostic.displayByAle": false,
@@ -55,8 +55,10 @@
     "list.nextKeymap": "<C-e>",
     "list.previousKeymap": "<C-u>",
     "rust-analyzer.inlayHints.chainingHints": false,
+    "rust-analyzer.debug.runtime": "vimspector",
     "rust-analyzer.inlayHints.refreshOnInsertMode": true,
     "rust-analyzer.updates.prompt": false,
+    "rust-analyzer.debug.vimspector.configuration.name": "rust - lldb",
     "coc.preferences.formatOnSaveFiletypes": [
         "go",
         "javascript",
@@ -99,15 +101,20 @@
         "jsp"
     ],
     "languageserver": {
-        "go": {
+        "golang": {
             "command": "gopls",
             "rootPatterns": [
-                "go.mod"
+                "go.mod",
+                ".vim/",
+                ".git/",
+                ".hg/"
             ],
-            "trace.server": "verbose",
             "filetypes": [
                 "go"
-            ]
+            ],
+            "initializationOptions": {
+                "usePlaceholders": true
+            }
         },
         "lua": {
             "command": "lua-lsp",
